@@ -1,0 +1,94 @@
+{% extends 'base.html' %} 
+{% block title %}{% endblock %}
+{% block content %}
+<link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet"/>
+<link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet"/>
+<style>
+.vjs-theme-forest {
+    --vjs-theme-forest--primary: #158cba;
+    --vjs-theme-forest--secondary: #fff;
+}
+</style>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-3 p-0">
+            <div class="card">
+                <div class="card-header">
+                    Мазмұны
+                </div>
+                <div class="accordion" id="lectures">
+                    <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Лекция сипаттамасы
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#lectures">
+                        <div class="accordion-body">
+                            {{ lecture.description }}
+                        </div>
+                    </div>
+                    </div>
+                    <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Транскрипт
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#lectures">
+                        <div class="accordion-body">
+                            {{ lecture.transcript }}
+                        </div>
+                    </div>
+                    </div>
+                    <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Барлық лекциялар
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#lectures">
+                        <div class="accordion-body">
+                            {% for lecture in lectures %}
+                            <p>
+                                <a class="text-decoration-none" href="{{ lecture.get_absolute_url }}">
+                                        <svg viewBox="0 0 24 24" role="presentation" style="width: 1.2rem; height: 1.2rem;">
+                                            <path d="M8,5.14V19.14L19,12.14L8,5.14Z" style="fill: currentcolor;"></path>
+                                        </svg> 
+                                    {{ lecture.title }}
+                                </a>
+                            </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 p-0">
+            <div class="mx-2">
+                <video
+                    id="my-video"
+                    class="video-js vjs-theme-forest"
+                    controls
+                    preload="none"
+                    width="854"
+                    height="480"
+                    poster=""
+                    data-setup="{}"
+                >
+                    <source src="{{ lecture.video_url }}" type="video/mp4"/>
+                    <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                    >
+                    </p>
+                </video>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://vjs.zencdn.net/7.18.1/video.min.js"></script>
+{% endblock %}

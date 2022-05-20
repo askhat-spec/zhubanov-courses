@@ -1,0 +1,78 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+
+
+<div class="py-5 bg-dark">
+    <div class="container">
+        <div class="align-items-center row">
+            <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12">
+            <div>
+                <h1 class="text-white display-4 fw-semi-bold">{{ course.title }}</h1>
+                <p class="text-white mb-6 lead"></p>
+                <div class="d-flex align-items-center">
+                <p class="px-2 text-muted">Курс коды: {{ course.code }}</p>
+                
+                <p class="px-2 text-muted">Академиялық дәреже: {{ course.degree }}</p>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 col-sm-12 mx-2 p-4 mt-2 shadow border-0">
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-bs-toggle="tab">Курс туралы</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#syllabus" class="nav-link" data-bs-toggle="tab">Силлабус</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#readings" class="nav-link" data-bs-toggle="tab">Оқу құралдары</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#lectures" class="nav-link" data-bs-toggle="tab">Видеолекциялар</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-4">
+                <div class="tab-pane fade show active" id="home">
+                    <img style="max-width: 30em;" src="{% if course.image %}{{ course.image.url }}{% else %}{% static "images/no_image.jpg" %}{% endif %}" alt="..." />
+                    <p>{{ course.description }}</p>
+                </div>
+                <div class="tab-pane fade" id="syllabus">
+                    <p>{{ course.syllabus }}</p>
+                </div>
+                <div class="tab-pane fade" id="readings">
+                    <p>{{ course.readings }}</p>
+                </div>
+                <div class="tab-pane fade" id="lectures">
+                    {% for lecture in lectures %}
+                    <p>
+                        <a class="text-decoration-none" href="{{ lecture.get_absolute_url }}">
+                                <svg viewBox="0 0 24 24" role="presentation" style="width: 1.2rem; height: 1.2rem;">
+                                    <path d="M8,5.14V19.14L19,12.14L8,5.14Z" style="fill: currentcolor;"></path>
+                                </svg> 
+                            {{ lecture.title }}
+                        </a>
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-12 mx-2 p-4 mt-2 shadow border-0">
+            <div class="mb-3 mb-4 card border-light">
+                <h5 class="card-title text-primary">Курс авторы</h5>
+                <div class="card-body">
+                    <h4 class="card-title">{{ course.author.get_full_name }}</h4>
+                    <p class="card-text">{{ course.author.about }}</p>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
