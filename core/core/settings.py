@@ -1,13 +1,14 @@
 from pathlib import Path
 import environ
+import os
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     DEBUG=(bool, False)
 )
 environ.Env().read_env()
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
@@ -56,8 +57,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+if DEBUG:
+    DATABASES = {
+        'default': env.db()
+    }
+
 DATABASES = {
-    'default': env.db()
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
