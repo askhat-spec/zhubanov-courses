@@ -4,7 +4,6 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 
-from slugify import Slugify, CYRILLIC
 import boto3
 import environ
 
@@ -20,9 +19,6 @@ S3_BUCKET_NAME = env('S3_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-# URL адрес құру үшін
-slugify = Slugify(pretranslate=CYRILLIC)
-
 
 @login_required
 def cabinet(request):
@@ -36,7 +32,6 @@ def create_course(request):
         form = CourseCreateForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
-            course.slug = slugify(form.cleaned_data['title'].lower())
             course.author = request.user
             course.save()
             return redirect("cabinet")
@@ -53,7 +48,6 @@ def edit_course(request, course_slug):
         form = CourseCreateForm(request.POST,  request.FILES, instance = course)
         if form.is_valid():
             course = form.save(commit=False)
-            course.slug = slugify(form.cleaned_data['title'].lower())
             course.author = request.user
             course.save()
             return redirect("cabinet")
@@ -69,7 +63,6 @@ def create_lecture(request, course_slug):
         form = LectureCreateForm(request.POST, request.FILES)
         if form.is_valid():
             lecture = form.save(commit=False)
-            lecture.slug = slugify(form.cleaned_data['title'].lower())
             lecture.course = course
 
             # botocore.handlers.BUILTIN_HANDLERS = [elem for elem in botocore.handlers.BUILTIN_HANDLERS if not (elem[0].startswith('before-parameter-build.s3.') and elem[1] == botocore.handlers.validate_ascii_metadata)]
@@ -100,7 +93,6 @@ def edit_lecture(request, course_slug, lecture_slug):
         form = LectureCreateForm(request.POST, request.FILES, instance = current_lecture)
         if form.is_valid():
             lecture = form.save(commit=False)
-            lecture.slug = slugify(form.cleaned_data['title']).lower()
             lecture.course = course
             # botocore.handlers.BUILTIN_HANDLERS = [elem for elem in botocore.handlers.BUILTIN_HANDLERS if not (elem[0].startswith('before-parameter-build.s3.') and elem[1] == botocore.handlers.validate_ascii_metadata)]
             if form.cleaned_data['video']:

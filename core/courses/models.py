@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 
 
 class Degree(models.Model):
@@ -20,6 +21,10 @@ class Profile(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=150, verbose_name='Кафедра')
     slug = models.SlugField(max_length=150, unique=True, db_index=True, verbose_name='URL')
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Department, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.name
@@ -43,6 +48,10 @@ class Course(models.Model):
     created = models.DateField(auto_now_add=True, editable=True)
     modified = models.DateField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Course, self).save(*args, **kwargs)
+
     def __str__(self) -> str:
         return self.title
 
@@ -61,6 +70,9 @@ class Lecture(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Lecture, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.title
