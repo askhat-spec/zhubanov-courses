@@ -40,8 +40,8 @@
                 </ul>
             </div>
                 {% if courses %}
-                {% for course in courses %}
                 <div class="col-lg-8 col-md-8 col-sm-12">
+                    {% for course in courses %}
                     <div class="mb-4 card-hover card shadow border-0">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between">
@@ -64,8 +64,8 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 {% endif %}
         </div>
     </div>
